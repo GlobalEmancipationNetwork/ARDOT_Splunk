@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "2.0.0",
+  "info": {
+    "title": "Trafficking Initiative 2026",
+    "id": {
+      "group": null,
+      "name": "ARDOT",
+      "version": "1.0.0"
+    },
+    "author": [
+      {
+        "name": "ARDOT",
+        "email": null,
+        "company": null
+      }
+    ],
+    "releaseDate": null,
+    "description": "ARDOT Trafficking Initiative 2026 - Anti-trafficking data analysis and visualization",
+    "classification": {
+      "intendedAudience": null,
+      "categories": [],
+      "developmentStatus": "Production/Stable"
+    },
+    "commonInformationModels": null,
+    "license": {
+      "name": null,
+      "text": null,
+      "uri": null
+    },
+    "privacyPolicy": {
+      "name": null,
+      "text": null,
+      "uri": null
+    },
+    "releaseNotes": {
+      "name": null,
+      "text": null,
+      "uri": null
+    }
+  },
+  "dependencies": {},
+  "tasks": [],
+  "inputGroups": {},
+  "incompatibleApps": {},
+  "platformRequirements": {
+    "splunk": {
+      "Enterprise": "*"
+    }
+  },
+  "targetWorkloads": ["*"]
+}
