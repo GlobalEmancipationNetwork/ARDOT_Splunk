@@ -1,7 +1,7 @@
 <nav search_view="search" color="#1B2A4A">
-  <view name="trafficking_data" default="true" />
+  <view name="traffic_means" default="true" />
   <collection label="Dashboards">
-    <view name="trafficking_data" />
+    <view name="traffic_means" />
   </collection>
   <collection label="Reports">
     <saved source="unclassified" match="ARDOT" />
