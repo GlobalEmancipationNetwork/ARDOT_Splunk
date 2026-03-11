@@ -1,0 +1,5 @@
+Place lookup CSV files in this directory.
+Reference them in transforms.conf with:
+
+[lookup_name]
+filename = your_file.csv

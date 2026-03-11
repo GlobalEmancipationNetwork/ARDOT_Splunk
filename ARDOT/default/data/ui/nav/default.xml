@@ -1,0 +1,12 @@
+<nav search_view="search" color="#1B2A4A">
+  <view name="trafficking_data" default="true" />
+  <collection label="Dashboards">
+    <view name="trafficking_data" />
+  </collection>
+  <collection label="Reports">
+    <saved source="unclassified" match="ARDOT" />
+  </collection>
+  <collection label="Search">
+    <view name="search" />
+  </collection>
+</nav>

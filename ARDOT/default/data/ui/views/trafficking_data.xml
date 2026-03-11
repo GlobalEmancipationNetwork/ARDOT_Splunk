@@ -1,0 +1,124 @@
+<form version="1.1" theme="dark">
+  <label>Trafficking Data</label>
+  <fieldset submitButton="false" autoRun="false">
+    <input type="multiselect" token="Recruitment" searchWhenChanged="true">
+      <label>Recruitment Method Includes</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>RMethod</fieldForLabel>
+      <fieldForValue>RMethod</fieldForValue>
+      <search>
+        <query>|search host="gen-data" index="gen-data" sourcetype="csv" Address_Location="Arkansas, United States" 
+| rename "Recruitment Method" as RecruitmentMethod 
+| eval method_array = split(RecruitmentMethod, ",")
+| mvexpand method_array
+| eval RMethod = trim(method_array)
+| dedup RMethod
+| where RMethod != ""
+| table RMethod</query>
+        <earliest>0</earliest>
+        <latest></latest>
+      </search>
+      <valuePrefix>RecruitmentMethod="*</valuePrefix>
+      <valueSuffix>*"</valueSuffix>
+      <delimiter>  OR </delimiter>
+    </input>
+    <input type="multiselect" token="Transportation" searchWhenChanged="true">
+      <label>Transportation Method Includes</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>TMethod</fieldForLabel>
+      <fieldForValue>TMethod</fieldForValue>
+      <search>
+        <query>|search host="gen-data" index="gen-data" sourcetype="csv" Address_Location="Arkansas, United States" 
+| rename "Transportation Method" as TransportationMethod 
+| eval method_array = split(TransportationMethod, ",")
+| mvexpand method_array
+| eval TMethod = trim(method_array)
+| dedup TMethod
+| where TMethod != ""
+| table TMethod</query>
+        <earliest>0</earliest>
+        <latest></latest>
+      </search>
+      <valuePrefix>TransportationMethod="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>  OR </delimiter>
+    </input>
+    <input type="multiselect" token="Coercion" searchWhenChanged="true">
+      <label>Coercion Method Includes</label>
+      <choice value="*">All</choice>
+      <default>*</default>
+      <initialValue>*</initialValue>
+      <fieldForLabel>CMethod</fieldForLabel>
+      <fieldForValue>CMethod</fieldForValue>
+      <search>
+        <query>|search host="gen-data" index="gen-data" sourcetype="csv" Address_Location="Arkansas, United States" 
+| rename "Coercion Method" as CoercionMethod 
+| eval method_array = split(CoercionMethod, ",")
+| mvexpand method_array
+| eval CMethod = trim(method_array)
+| dedup CMethod
+| where CMethod != ""
+| table CMethod</query>
+        <earliest>0</earliest>
+        <latest></latest>
+      </search>
+      <valuePrefix>CoercionMethod="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter>  OR </delimiter>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Recruitment, transportation and Coercion methods</title>
+      <viz type="sankey-viz.sankey-viz">
+        <search>
+          <query>host="gen-data" index="gen-data" sourcetype="csv" Address_Location="Arkansas, United States" 
+```| dedup _raw  ```
+| rename "Coercion Method" as CoercionMethod "Recruitment Method" as RecruitmentMethod "Transportation Method" as TransportationMethod  
+| search ($Recruitment$) AND ($Transportation$) AND ($Coercion$)
+| eval RecruitmentMethod_mv = split(RecruitmentMethod, ",")
+| eval TransportationMethod_mv = split(TransportationMethod, ",") 
+| eval CoercionMethod_mv = split(CoercionMethod, ",")
+| mvexpand RecruitmentMethod_mv
+| mvexpand TransportationMethod_mv
+| mvexpand CoercionMethod_mv
+| eval RecruitmentMethod_single = trim(RecruitmentMethod_mv)
+| eval TransportationMethod_single = trim(TransportationMethod_mv)
+| eval CoercionMethod_single = trim(CoercionMethod_mv)
+| where isnotnull(RecruitmentMethod_single) AND isnotnull(TransportationMethod_single) AND isnotnull(CoercionMethod_single)
+| stats count by RecruitmentMethod_single TransportationMethod_single CoercionMethod_single
+| appendpipe [stats count by RecruitmentMethod_single TransportationMethod_single | rename RecruitmentMethod_single as source, TransportationMethod_single as target]
+| appendpipe [stats count by TransportationMethod_single CoercionMethod_single | rename TransportationMethod_single as source, CoercionMethod_single as target]
+| search source=*
+| where count&gt;0
+| fields source target count</query>
+          <earliest>0</earliest>
+          <latest></latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="height">336</option>
+        <option name="refresh.display">preview</option>
+        <option name="sankey-viz.sankey-viz.animation">wave</option>
+        <option name="sankey-viz.sankey-viz.colorScheme">neon</option>
+        <option name="sankey-viz.sankey-viz.enableDetailsPanel">false</option>
+        <option name="sankey-viz.sankey-viz.enableZoom">true</option>
+        <option name="sankey-viz.sankey-viz.numDecimalPlaces">0</option>
+        <option name="sankey-viz.sankey-viz.thousandsSeparator">true</option>
+        <option name="sankey-viz.sankey-viz.tokenFromNode">skv_from_node_token</option>
+        <option name="sankey-viz.sankey-viz.tokenToNode">skv_to_node_token</option>
+        <option name="sankey-viz.sankey-viz.tokenTooltip">skv_tooltip_token</option>
+        <option name="sankey-viz.sankey-viz.tokenValue">skv_value_token</option>
+        <option name="sankey-viz.sankey-viz.unitPosition">after</option>
+        <option name="sankey-viz.sankey-viz.useGradientLinks">true</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+      </viz>
+    </panel>
+  </row>
+</form>
